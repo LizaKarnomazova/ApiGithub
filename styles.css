@@ -1,0 +1,78 @@
+ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.body {
+    max-width: 1100px;
+    margin: auto;
+}
+.header {
+    margin-top: 10px;
+    box-shadow: 0 2px 0 0 #adadad;
+    padding-left: 20px;
+}
+.main {
+    padding-left: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 50px;
+}
+.searchForm {
+    position: relative;
+    padding: 15px 0 5px 0;
+    width: 500px;
+    font-size: 20px;
+    background: #FAFAF5;
+    border: 1px solid #adadad;
+    border-radius: 10px;
+}
+.searchForm__input, .searchForm__input:focus {
+    width: 95%;
+    padding-left: 15px;
+    font-size: 20px;
+    border: none;
+    background: none;
+    outline: none;
+}
+.searchForm__list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.searchForm__item {
+    cursor: default;
+    padding: 5px 0 5px 15px;
+}
+.searchForm__item:hover {
+    background: #eeeede;
+}
+.searchForm__item:first-child {
+    box-shadow: 0 -1px 0 0 #adadad;
+}
+.repository__list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.repo__text {
+    padding-bottom: 5px;
+    padding-left: 15px;
+}
+.repo__button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    border-radius: 3px;
+    border: 1px solid #adadad;
+    background: no-repeat 50% 50% url('images/cross.svg') #eeeede;
+}
+.repo__button:hover {
+    background: no-repeat 50% 50% url('images/cross.svg') #e6e6d3;
+}
+.hideElement {
+    display: none;
+}
