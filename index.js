@@ -43,7 +43,7 @@ const debounceFn = () => {
     clearChildren(searchList)
     getRepo(response => {
         response.items.forEach(repo => {
-            if (repo.full_name.includes(userInput.value) &&
+            if (repo.full_name.includes(userInput.value.toLowerCase()) &&
                 userInput.value != false &&
                 searchList.childElementCount < 5) {
                 const searchItem = createElement('li', repo.full_name, 'searchForm__item', searchList);
@@ -52,7 +52,7 @@ const debounceFn = () => {
                     clearChildren(searchList)
                     userInput.value = '';
                     const repoItem = document.createElement('li');
-                    repoItem.classList.add('searchForm');
+                    repoItem.classList.add('repository__item');
                     createElement('div', 'Name: ' + repo.full_name, 'repo__text', repoItem);
                     createElement('div', 'Owner: ' + repo.owner.login, 'repo__text', repoItem);
                     createElement('div', 'Stars: ' + repo.watchers, 'repo__text', repoItem);
