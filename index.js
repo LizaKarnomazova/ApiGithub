@@ -1,4 +1,3 @@
-
 const userInput = document.querySelector('input');
 let searchList = document.querySelector('.searchForm__list');
 let repoList = document.querySelector('.repository__list');
@@ -10,20 +9,6 @@ const debounce = (fn, debounceTime) => {
         timeout = setTimeout(fn, debounceTime)
     }
 };
-
-
-function getRepo(cb) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('get', "https://api.github.com/search/repositories?q=Q");
-
-    xhr.addEventListener('load', () => {
-        const response = JSON.parse(xhr.responseText)
-        cb(response);
-    });
-
-    xhr.send();
-    
-}
 
 function createElement(tag, text, className, parent) {
     const child = document.createElement(tag);
@@ -39,34 +24,43 @@ function clearChildren(parent) {
     }
 }
 
-const debounceFn = () => {
-    clearChildren(searchList)
-    getRepo(response => {
-        response.items.forEach(repo => {
-            if (repo.full_name.includes(userInput.value.toLowerCase()) &&
-                userInput.value != false &&
-                searchList.childElementCount < 5) {
-                const searchItem = createElement('li', repo.full_name, 'searchForm__item', searchList);
-                console.log(repo);
-                searchItem.addEventListener('click', () => {
-                    clearChildren(searchList)
-                    userInput.value = '';
-                    const repoItem = document.createElement('li');
-                    repoItem.classList.add('repository__item');
-                    createElement('div', 'Name: ' + repo.full_name, 'repo__text', repoItem);
-                    createElement('div', 'Owner: ' + repo.owner.login, 'repo__text', repoItem);
-                    createElement('div', 'Stars: ' + repo.watchers, 'repo__text', repoItem);
-                    let buttonClose = createElement('button', '', 'repo__button', repoItem);
-                    repoList.appendChild(repoItem);
-                    buttonClose.addEventListener('click', () => {
-                        repoItem.remove();
+function debounceFn() {
+    if (!userInput.value) {
+        clearChildren(searchList);
+        return
+    }
+    fetch("https://api.github.com/search/repositories?q="+userInput.value.toLowerCase())
+        .then(response => {
+            return response.json();
+        })
+        .then(repos => {
+            clearChildren(searchList);
+            repos.items.forEach(repo => {
+                console.log(repo.full_name.includes(userInput.value.toLowerCase()));
+                if (repo.full_name.includes(userInput.value.toLowerCase()) &&
+                    userInput.value != false &&
+                    searchList.childElementCount < 5) {
+                    const searchItem = createElement('li', repo.full_name, 'searchForm__item', searchList);
+                    console.log(repo);
+                    searchItem.addEventListener('click', () => {
+                        clearChildren(searchList)
+                        userInput.value = '';
+                        const repoItem = document.createElement('li');
+                        repoItem.classList.add('repository__item');
+                        createElement('div', 'Name: ' + repo.full_name, 'repo__text', repoItem);
+                        createElement('div', 'Owner: ' + repo.owner.login, 'repo__text', repoItem);
+                        createElement('div', 'Stars: ' + repo.watchers, 'repo__text', repoItem);
+                        let buttonClose = createElement('button', '', 'repo__button', repoItem);
+                        repoList.appendChild(repoItem);
+                        buttonClose.addEventListener('click', () => {
+                            repoItem.remove();
+                        });
                     });
-                });
 
-            }
-        });
-    });
+                }
+            });
+        })
+        .catch(err => console.log(err));
 }
 
-
-userInput.addEventListener('input', debounce(debounceFn, 500));
+userInput.addEventListener('input', debounce(debounceFn, 400));
